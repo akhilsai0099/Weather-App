@@ -9,10 +9,13 @@ import Back from '../components/Back'
 const Search = () => {
     const { city } = useParams();
     const [data, setData] = useState({})
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const func = async () => {
+            setLoading(true);
             const response = await fetcher(city);
+            setLoading(false);
             setData(JSON.parse(response))
         }
         func()
@@ -22,22 +25,22 @@ const Search = () => {
             <div className="flex flex-col h-screen">
                 <div className='flex  mx-4 px-2 items-center'>
 
-                    <div className=' flex-grow '><Back />
+                    <div className="flex-grow sm:hidden">
+                        <Back />
                     </div>
-
-                    <div >
+                    <div className="flex items-center sm:justify-center sm:w-full">
                         <Autocomplete />
                     </div>
                 </div>
 
 
-                {Object.keys(data).length === 0 && (
+                {loading && (
                     <div className='flex justify-center items-center text-center h-screen'>
                         <p className='text-3xl'>Loading Data...</p>
                     </div>
                 )}
 
-                {Object.keys(data).length !== 0 && (
+                {!loading && (
                     <div className="flex flex-grow justify-center items-center">
                         <div className="flex flex-col items-center gap-2">
                             <h3>City: {city}</h3>
